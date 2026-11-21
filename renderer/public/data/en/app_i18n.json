@@ -301,7 +301,8 @@
     "profile": "Profile",
     "search_selected": "Only selected",
     "search_stat_col": "Stat (found: {0})",
-    "new_mods_icon": "Show icon for new mods"
+    "new_mods_icon": "Show icon for new mods",
+    "copy_search_title": "Copy stash search string (highlights maps without dangerous mods of the active profile)"
   },
   "trade_result": {
     "error" :"Trade site request failed",

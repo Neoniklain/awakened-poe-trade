@@ -12,6 +12,8 @@
           class="w-6 bg-gray-800"
         >{{ profile.text }}</button>
       </div>
+      <button @click="copySearchString" :title="t('map_check.copy_search_title')"
+        class="ml-2 px-1 bg-gray-800">{{ searchCopied ? '✓' : '⧉' }}</button>
     </div>
     <FullscreenImage v-if="image"
       :class="$style.screenshot" :src="image" />
@@ -39,12 +41,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ItemRarity, ParsedItem } from '@/parser'
 import { ModifierType } from '@/parser/modifiers'
 import { prepareMapStat } from './prepare-map-stats'
 import { type MapCheckConfig, isOutdated } from './common.js'
+import { buildSearchStrings } from './search-string'
 
 import MapStatButton from './MapStatButton.vue'
 import FullscreenImage from '@/web/ui/FullscreenImage.vue'
@@ -102,6 +105,17 @@ const profiles = computed(() => {
     select: () => { props.config.profile = i + 1 }
   }))
 })
+
+const searchCopied = ref(false)
+async function copySearchString () {
+  const res = buildSearchStrings(props.config)
+  if (!res) return
+  try {
+    await navigator.clipboard.writeText(res.runnable)
+    searchCopied.value = true
+    setTimeout(() => { searchCopied.value = false }, 1500)
+  } catch { /* буфер обмена недоступен */ }
+}
 </script>
 
 <style lang="postcss" module>
